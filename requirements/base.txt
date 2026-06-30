@@ -1,0 +1,21 @@
+# Core framework
+Django>=5.1,<6.0
+djangorestframework>=3.15
+
+# Authentication (JWT)
+djangorestframework-simplejwt>=5.3
+
+# API documentation (Swagger / OpenAPI)
+drf-spectacular>=0.27
+
+# Filtering / search / ordering
+django-filter>=24.0
+
+# PostgreSQL driver
+psycopg[binary]>=3.2
+
+# Environment variables
+django-environ>=0.11
+
+# CORS
+django-cors-headers>=4.4

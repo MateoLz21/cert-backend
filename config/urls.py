@@ -16,6 +16,8 @@ from drf_spectacular.views import (
 api_v1_patterns = [
     path("auth/", include("apps.accounts.urls")),
     path("users/", include("apps.accounts.urls_users")),
+    path("public/", include("apps.public.urls")),
+    path("leads/", include("apps.public.urls_admin")),
     path("companies/", include("apps.companies.urls")),
     path("services/", include("apps.services.urls")),
     path("scheduling/", include("apps.scheduling.urls")),

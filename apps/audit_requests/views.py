@@ -6,6 +6,9 @@ from rest_framework.response import Response
 
 from apps.accounts.permissions import IsAdmin, IsAdminOrOwner
 
+from apps.scheduling.models import AvailabilitySlot
+from apps.scheduling.services import SchedulingService
+
 from .models import AuditRequest
 from .serializers import AuditRequestSerializer
 from .services import AuditRequestService
@@ -39,6 +42,13 @@ class AuditRequestViewSet(viewsets.ModelViewSet):
 
     def get_object_owner(self, obj):
         return obj.company.user
+
+    def perform_destroy(self, instance):
+        """Release the booked slot before deleting the request."""
+        slot = instance.slot
+        instance.delete()
+        if slot and slot.status == AvailabilitySlot.SlotStatus.BOOKED:
+            SchedulingService.release_slot(slot)
 
     def perform_create(self, serializer):
         user = self.request.user

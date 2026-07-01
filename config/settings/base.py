@@ -52,6 +52,7 @@ LOCAL_APPS = [
     "apps.audit_requests",
     "apps.payments",
     "apps.dashboard",
+    "apps.public",
 ]
 
 INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + LOCAL_APPS
@@ -166,3 +167,11 @@ SPECTACULAR_SETTINGS = {
 # --- CORS ---------------------------------------------------------------
 CORS_ALLOWED_ORIGINS = env.list("CORS_ALLOWED_ORIGINS", default=[])
 CORS_ALLOW_ALL_ORIGINS = env.bool("CORS_ALLOW_ALL_ORIGINS", default=DEBUG)
+
+# --- Stripe / pagos -----------------------------------------------------
+STRIPE_SECRET_KEY = env("STRIPE_SECRET_KEY", default="")
+STRIPE_PUBLISHABLE_KEY = env("STRIPE_PUBLISHABLE_KEY", default="")
+STRIPE_WEBHOOK_SECRET = env("STRIPE_WEBHOOK_SECRET", default="")
+STRIPE_CURRENCY = env("STRIPE_CURRENCY", default="pen")
+# URL del sitio público para redirigir tras el pago.
+FRONTEND_URL = env("FRONTEND_URL", default="http://localhost:3000")

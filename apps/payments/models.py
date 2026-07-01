@@ -45,6 +45,12 @@ class Payment(BaseModel):
         null=True,
         blank=True,
     )
+    external_reference = models.CharField(
+        "Referencia externa",
+        max_length=255,
+        blank=True,
+        help_text="Identificador de la pasarela de pago (p. ej. Stripe session id).",
+    )
 
     class Meta:
         verbose_name = "Pago"

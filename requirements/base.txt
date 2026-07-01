@@ -19,3 +19,6 @@ django-environ>=0.11
 
 # CORS
 django-cors-headers>=4.4
+
+# Payments (Stripe)
+stripe>=11.0

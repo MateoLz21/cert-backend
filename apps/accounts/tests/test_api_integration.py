@@ -89,6 +89,32 @@ def test_audit_request_create_generates_code_and_scopes(users):
 
 
 @pytest.mark.django_db
+def test_deleting_request_releases_slot(users):
+    company = Company.objects.create(user=users["c1"], **company_payload(ruc="20000000002"))
+    service = Service.objects.create(
+        name="ISO 14001", price="1500.00", estimated_duration="08:00:00"
+    )
+    slot = AvailabilitySlot.objects.create(
+        date="2026-07-02", start_time="09:00", end_time="17:00"
+    )
+    c1 = make_client(users["c1"])
+    res = c1.post(
+        "/api/v1/audit-requests/",
+        {"company": str(company.id), "service": str(service.id), "slot": str(slot.id)},
+        format="json",
+    )
+    assert res.status_code == 201
+    slot.refresh_from_db()
+    assert slot.status == AvailabilitySlot.SlotStatus.BOOKED
+
+    # Deleting the request frees the slot again.
+    delete = make_client(users["admin"]).delete(f"/api/v1/audit-requests/{res.data['id']}/")
+    assert delete.status_code == 204
+    slot.refresh_from_db()
+    assert slot.status == AvailabilitySlot.SlotStatus.AVAILABLE
+
+
+@pytest.mark.django_db
 def test_users_crud_permissions(users):
     # Client forbidden to list users.
     assert make_client(users["c1"]).get("/api/v1/users/").status_code == 403
